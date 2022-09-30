@@ -12,9 +12,17 @@ app.set('view engine', 'handlebars')
 //設定靜態網站資料夾
 app.use(express.static('public'))
 
+//routing 
 app.get('/', (req, res) =>{
   res.render('index', {restaurant: restaurantDataBase.results})
 })
+
+app.get('/restaurants/:id', (req, res) =>{
+  const dataBaseID = restaurantDataBase.results.filter( dataBase => dataBase.id === Number(req.params.id))
+  res.render('show', {restaurant: dataBaseID[0]})
+})
+
+
 
 //啟動&監聽server
 app.listen(port, () => {
