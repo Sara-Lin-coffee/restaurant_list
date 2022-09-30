@@ -22,7 +22,10 @@ app.get('/restaurants/:id', (req, res) =>{
   res.render('show', {restaurant: dataBaseID[0]})
 })
 
-
+app.get('/search', (req, res) =>{
+  const dataBaseID = restaurantDataBase.results.filter( restaurant => restaurant.name.toLowerCase().includes(`${req.query.keyword.toLowerCase()}`))
+  res.render('index', { restaurant: dataBaseID, value: req.query.keyword})
+ })
 
 //啟動&監聽server
 app.listen(port, () => {
