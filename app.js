@@ -40,10 +40,12 @@ app.get('/', (req, res) =>{
     .catch( error => console.log('error'))
 })
 
-//
+//render detail info. for each restaurant
 app.get('/restaurants/:id', (req, res) =>{
-  const dataBaseID = restaurantDataBase.results.filter( dataBase => dataBase.id === Number(req.params.id))
-  res.render('show', {restaurant: dataBaseID[0]})
+  const id = req.params.id
+  return Restaurant.findById(id)
+  .lean()
+  .then((restaurant) => {res.render('show', {restaurant})})
 })
 
 app.get('/search', (req, res) =>{
