@@ -18,9 +18,8 @@ db.on('error', () => {
 
 db.once('open', () => {
   console.log('mongoDB connected!')
-
   for (let i = 0; i < 8; i++) {
-    Restaurant.create({ item: `${restaurantDataBase.results}` })
+    Restaurant.create({ item: JSON.stringify(restaurantDataBase.results[i]) })
   }
   console.log('done')
 })
