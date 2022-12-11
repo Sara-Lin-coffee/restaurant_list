@@ -1,21 +1,46 @@
 const express = require('express')
+const exphbs = require('express-handlebars')
+const mongoose = require('mongoose')
+const bodyParser = require('body-parser')
+const Restaurant = require('./models/restaurant')
+
 const app = express()
 const port = 3000
-const exphbs = require('express-handlebars')
-const restaurantDataBase = require('./models/seeds/restaurant.json')
 
 //設定模板引擎
 app.engine('handlebars', exphbs({defaultLayout:'main'}))
 app.set('view engine', 'handlebars')
 
-//設定靜態網站資料夾
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
-//routing 
-app.get('/', (req, res) =>{
-  res.render('index', {restaurant: restaurantDataBase.results})
+//載入.env MongDB帳密
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+//連接MongDB
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const db = mongoose.connection
+db.on('error', () => {
+  console.log('mongodb error!')
+})
+db.once('open', () => {
+  console.log('mongodb connected!')
 })
 
+
+//呼叫根目錄
+app.get('/', (req, res) =>{
+  Restaurant.find()
+    .lean()
+    .then((restaurant) => {
+      res.render('index', { restaurant : restaurant })
+    })
+    .catch( error => console.log('error'))
+})
+
+//
 app.get('/restaurants/:id', (req, res) =>{
   const dataBaseID = restaurantDataBase.results.filter( dataBase => dataBase.id === Number(req.params.id))
   res.render('show', {restaurant: dataBaseID[0]})
