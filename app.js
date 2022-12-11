@@ -1,9 +1,8 @@
 const express = require('express')
 const app = express()
 const port = 3000
-
 const exphbs = require('express-handlebars')
-const restaurantDataBase = require('./restaurant.json')
+const restaurantDataBase = require('./models/seeds/restaurant.json')
 
 //設定模板引擎
 app.engine('handlebars', exphbs({defaultLayout:'main'}))
