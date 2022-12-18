@@ -50,6 +50,14 @@ app.get('/restaurants/:id', (req, res) =>{
   .then((restaurant) => {res.render('show', {restaurant})})
 })
 
+//render edit page for each restaurant
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then((restaurant) => { res.render('edit', { restaurant }) })
+})
+
 app.get('/search', (req, res) =>{
   Restaurant.find()
   .lean()
