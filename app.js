@@ -3,6 +3,7 @@ const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurant')
+const methodOverride = require('method-override')
 
 const app = express()
 const port = 3000
@@ -13,6 +14,7 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
+app.use(methodOverride('_method'))
 
 //載入.env MongDB帳密
 if (process.env.NODE_ENV !== 'production') {
